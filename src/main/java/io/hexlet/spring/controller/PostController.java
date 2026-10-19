@@ -24,7 +24,7 @@ public class PostController {
     public ResponseEntity<List<Post>>  index(@RequestParam(defaultValue = "10") Integer limit) {
         var result = posts.stream().limit(limit).toList();
         return ResponseEntity.ok()
-                .header("X-Total_Caunt", String.valueOf(result.size()))
+                .header("X-Total_Count", String.valueOf(result.size()))
                 .body(result);
     }
 
