@@ -1,0 +1,13 @@
+package hexlet.code.hexletspringblog;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class HexletSpringBlogApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}
