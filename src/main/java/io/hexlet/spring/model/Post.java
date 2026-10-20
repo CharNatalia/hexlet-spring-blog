@@ -1,9 +1,11 @@
 package io.hexlet.spring.model;
 
+import io.hexlet.spring.util.IdGenerator;
+
 import java.time.LocalDateTime;
 
 public class Post {
-    private static Long idNumber = 0L;
+    private static final IdGenerator userIds = new IdGenerator();
     private Long id;
 
     private String title;
@@ -16,12 +18,7 @@ public class Post {
         this.content = content;
         this.author = author;
 
-        this.id = getIdNumber();
-    }
-
-    public static Long getIdNumber() {
-        idNumber++;
-        return idNumber;
+        this.id = userIds.generateId();
     }
 
     public String getTitle() {

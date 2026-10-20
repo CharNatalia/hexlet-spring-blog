@@ -1,7 +1,6 @@
 package io.hexlet.spring.controller;
 
 import io.hexlet.spring.model.Post;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -12,13 +11,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Optional;
 
-@SpringBootApplication
 @RestController
+@RequestMapping("/api")
 public class PostController {
     private List<Post> posts = new ArrayList<>();
-    private Integer postId;
 
     @GetMapping("/posts")
     public ResponseEntity<List<Post>>  index(@RequestParam(defaultValue = "10") Integer limit) {
