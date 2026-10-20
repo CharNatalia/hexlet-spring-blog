@@ -1,6 +1,7 @@
 package io.hexlet.spring.controller;
 
 import io.hexlet.spring.model.User;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
@@ -13,6 +14,12 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+    @Value("${app.admin-email}")
+    private String adminEmail;
+
+    @Value("${app.page-size}")
+    private int page;
+
     private List<User> users = new ArrayList<>();
 
     @PostMapping
@@ -29,7 +36,7 @@ public class UserController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<User> index() {
-        return users;
+        return users.stream().limit(page).toList();
     }
 
     @GetMapping("/{id}")
