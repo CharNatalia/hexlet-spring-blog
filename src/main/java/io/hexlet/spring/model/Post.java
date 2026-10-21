@@ -1,8 +1,8 @@
 package io.hexlet.spring.model;
 
 import jakarta.persistence.*;
-
-import java.time.LocalDateTime;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 @Entity
 @Table(name = "posts")
@@ -11,8 +11,12 @@ public class Post {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank(message = "Заголовок не должен быть пустым")
     private String title;
+
+    @NotBlank(message = "Контент не может быть пустым")
     private String content;
+
     private boolean published;
 
     public Long getId() {
