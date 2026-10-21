@@ -1,6 +1,8 @@
 package io.hexlet.spring.controller;
 
+import io.hexlet.spring.Repository.UserRepository;
 import io.hexlet.spring.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -14,13 +16,15 @@ import java.util.Optional;
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
+
+    @Autowired
+    private UserRepository userRepository;
+
     @Value("${app.admin-email}")
     private String adminEmail;
 
     @Value("${app.page-size}")
     private int page;
-
-    private List<User> users = new ArrayList<>();
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -29,46 +33,42 @@ public class UserController {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Заголовок не должен быть пустым");
         }
-        users.add(user);
+        userRepository.save(user);
         return user;
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<User> index() {
-        return users.stream().limit(page).toList();
+        return userRepository.findAll();
     }
 
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public Optional<User> show(@PathVariable Long id) {
-        var user = users.stream()
-                .filter(u -> Objects.equals(id, u.getId()))
-                .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
-        return Optional.of(user);
+    public User show(@PathVariable Long id) {
+        return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
-        users.removeIf(u -> Objects.equals(u.getId(), id));
+        userRepository.deleteById(id);
     }
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public User edit(@PathVariable Long id, @RequestBody User data) {
-        var user = users.stream()
-                .filter(u -> Objects.equals(u.getId(), id))
-                .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
         if (data.getEmail() == null || data.getEmail().isBlank()) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Заголовок не должен быть пустым");
         }
-        user.setName(data.getName());
+        User user = userRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+        user.setFirstName(data.getFirstName());
+        user.setLastName(data.getLastName());
         user.setEmail(data.getEmail());
-        return user;
+        user.setBirthday(data.getBirthday());
+        return userRepository.save(user);
     }
 
 }

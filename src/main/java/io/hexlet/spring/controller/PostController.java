@@ -1,6 +1,8 @@
 package io.hexlet.spring.controller;
 
+import io.hexlet.spring.Repository.PostRepository;
 import io.hexlet.spring.model.Post;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,26 +17,25 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/api")
 public class PostController {
-    private List<Post> posts = new ArrayList<>();
+
+    @Autowired
+    PostRepository postRepository;
 
     @GetMapping("/posts")
-    public ResponseEntity<List<Post>>  index(@RequestParam(defaultValue = "10") Integer limit) {
-        var result = posts.stream().limit(limit).toList();
-        return ResponseEntity.ok()
-                .header("X-Total_Count", String.valueOf(result.size()))
-                .body(result);
+    @ResponseStatus(HttpStatus.OK)
+    public List<Post>  index(@RequestParam(defaultValue = "10") Integer limit) {
+        return postRepository.findAll().stream().limit(limit).toList();
     }
 
     @GetMapping("/posts/{id}")
-    public ResponseEntity<Post> show(@PathVariable Long id) {
-        var post = posts.stream()
-                .filter(p -> Objects.equals(p.getId(), id))
-                .findFirst();
-        return ResponseEntity.of(post);
+    @ResponseStatus(HttpStatus.OK)
+    public Post show(@PathVariable Long id) {
+        return postRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
     }
 
     @PostMapping("/posts")
-    public ResponseEntity<Post> create(@RequestBody Post post) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Post create(@RequestBody Post post) {
         if (post.getTitle() == null || post.getTitle().isBlank()) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Заголовок не должен быть пустым");
@@ -44,17 +45,13 @@ public class PostController {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "Содержимое не должно быть пустым");
         }
-        post.setCreatedAt(LocalDateTime.now());
-        posts.add(post);
-        var location = URI.create("/posts/" + post.getId());
-        return ResponseEntity.created(location).body(post);
+        return postRepository.save(post);
     }
 
     @PutMapping("/posts/{id}")
-    public ResponseEntity<Post> edit(@PathVariable Long id, @RequestBody Post data) {
-        var post = posts.stream()
-                .filter(p -> Objects.equals(p.getId(), id))
-                .findFirst()
+    @ResponseStatus(HttpStatus.OK)
+    public Post edit(@PathVariable Long id, @RequestBody Post data) {
+        var post = postRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
 
         if (data.getTitle() == null || data.getTitle().isBlank()) {
@@ -68,16 +65,15 @@ public class PostController {
         }
 
         post.setTitle(data.getTitle());
-        post.setAuthor(data.getAuthor());
+        post.setPublished(data.isPublished());
         post.setContent(data.getContent());
-        post.setCreatedAt(LocalDateTime.now());
 
-        return ResponseEntity.accepted().body(post);
+        return postRepository.save(post);
     }
 
     @DeleteMapping("/posts/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
-        posts.removeIf(p -> Objects.equals(p.getId(), id));
-        return ResponseEntity.noContent().build();
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void delete(@PathVariable Long id) {
+        postRepository.deleteById(id);
     }
 }
