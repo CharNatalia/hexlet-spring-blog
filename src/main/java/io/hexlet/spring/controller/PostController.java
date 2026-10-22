@@ -13,14 +13,15 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 @RequestMapping("/api")
 public class PostController {
 
-    @Autowired
-    PostRepository postRepository;
+    private final PostRepository postRepository;
+
+    public PostController(PostRepository postRepository) {
+        this.postRepository = postRepository;
+    }
 
     @GetMapping("/posts")
     public Page<Post> getPublishedPosts(
