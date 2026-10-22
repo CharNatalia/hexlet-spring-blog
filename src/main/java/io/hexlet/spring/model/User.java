@@ -4,17 +4,17 @@ import io.hexlet.spring.util.IdGenerator;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
 
 
 @Entity
 @Table(name = "users")
+@EntityListeners(AuditingEntityListener.class)
 public class User {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -23,6 +23,13 @@ public class User {
     private String firstName;
     private String lastName;
     private LocalDate birthday;
+
+    @LastModifiedDate
+    private LocalDate updatedAt;
+
+    @CreatedDate
+    @Column(nullable = false, updatable = false)
+    private LocalDate createdAt;
 
     @Column(unique = true)
     private String email;
@@ -65,5 +72,13 @@ public class User {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public LocalDate getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public LocalDate getCreatedAt() {
+        return createdAt;
     }
 }
