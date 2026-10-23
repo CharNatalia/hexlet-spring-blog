@@ -24,10 +24,10 @@ jobs:
       - name: Build & Test
         run: ./gradlew clean build
 
-      - name: Coverage report
-        run: ./gradlew jacocoTestReport
-
-      - name: SonarQube Scan
+      - name: Run tests and generate JaCoCo report
+        run: ./gradlew test jacocoTestReport
+        
+      - name: Build and analyze
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        run: ./gradlew sonarqube -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        run: ./gradlew build sonar --info
