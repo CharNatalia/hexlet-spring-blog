@@ -2,6 +2,8 @@ plugins {
     java
     id("org.springframework.boot") version "4.1.1"
     id("io.spring.dependency-management") version "1.1.7"
+    jacoco
+    id("org.sonarqube") version "7.4.0.8496"
 }
 
 group = "io.hexlet.spring"
@@ -32,8 +34,37 @@ dependencies {
 
     testImplementation("org.springframework.boot:spring-boot-starter-test")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
+    testImplementation("net.javacrumbs.json-unit:json-unit-assertj:6.2.0")
+    testImplementation("org.instancio:instancio-junit:5.6.0")
+    testImplementation("org.springframework.boot:spring-boot-starter-webmvc-test")
 }
 
 tasks.withType<Test> {
     useJUnitPlatform()
+}
+
+tasks.jacocoTestReport {
+    dependsOn(tasks.test)
+    reports {
+        xml.required.set(true)
+        html.required.set(true)
+    }
+}
+
+tasks.check {
+    dependsOn(tasks.jacocoTestReport)
+}
+
+sonarqube {
+    properties {
+
+
+        property("sonar.projectKey", "CharNatalia_hexlet-spring-blog")
+        property("sonar.organization", "charnatalia")
+        property("sonar.host.url", "https://sonarcloud.io")
+        property("sonar.java.coveragePlugin", "jacoco")
+        property("sonar.junit.reportPaths", "build/test-results/test")
+        property("sonar.jacoco.reportPaths", "build/jacoco/test.exec")
+        property("sonar.coverage.jacoco.xmlReportPaths", "build/reports/jacoco/test/jacocoTestReport.xml")
+    }
 }

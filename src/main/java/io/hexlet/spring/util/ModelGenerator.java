@@ -32,7 +32,8 @@ public class ModelGenerator {
 
             var post = new Post();
             post.setTitle(faker.name().title());
-            post.setContent(faker.lorem().paragraph());
+            String content = faker.lorem().paragraph();
+            post.setContent(content.substring(0, Math.min(content.length(), 255)));
             post.setPublished(faker.bool().bool());
             postRepository.save(post);
         }

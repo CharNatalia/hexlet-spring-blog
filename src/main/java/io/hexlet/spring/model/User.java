@@ -24,15 +24,15 @@ public class User {
     private String lastName;
     private LocalDate birthday;
 
+    @Column(unique = true)
+    private String email;
+
     @LastModifiedDate
     private LocalDate updatedAt;
 
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDate createdAt;
-
-    @Column(unique = true)
-    private String email;
 
     public Long getId() {
         return id;

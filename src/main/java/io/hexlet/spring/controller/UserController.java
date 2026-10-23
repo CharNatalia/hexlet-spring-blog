@@ -8,10 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/users")
@@ -57,13 +54,13 @@ public class UserController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public User edit(@PathVariable Long id, @RequestBody User data) {
-        if (data.getEmail() == null || data.getEmail().isBlank()) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Заголовок не должен быть пустым");
-        }
+    public User update(@PathVariable Long id, @RequestBody User data) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND));
+//        if ((data.getEmail() == null || data.getEmail().isBlank()) & user.getEmail() == null) {
+//            throw new ResponseStatusException(
+//                    HttpStatus.BAD_REQUEST, "Заголовок не должен быть пустым");
+//        }
         user.setFirstName(data.getFirstName());
         user.setLastName(data.getLastName());
         user.setEmail(data.getEmail());
