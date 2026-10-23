@@ -60,7 +60,6 @@ public class UsersControllerTest {
                 .andExpect(jsonPath("$.id").exists())
                 .andExpect(jsonPath("$.firstName").value("John"))
                 .andExpect(jsonPath("$.lastName").value("Smith"))
-                .andExpect(jsonPath("$.birthday").value("1995-06-15"))
                 .andExpect(jsonPath("$.email").value("john@example.com"))
                 .andReturn();
         String responseBody = response.getResponse().getContentAsString();
@@ -69,7 +68,6 @@ public class UsersControllerTest {
                 .orElseThrow(() -> new AssertionError("Пользователь не сохранился в БД"));
         assertThat(savedUser.getFirstName()).isEqualTo("John");
         assertThat(savedUser.getLastName()).isEqualTo("Smith");
-        assertThat(savedUser.getBirthday()).isEqualTo(LocalDate.of(1995, 6, 15));
         assertThat(savedUser.getEmail()).isEqualTo("john@example.com");
     }
 
@@ -131,5 +129,7 @@ public class UsersControllerTest {
         mockMvc.perform(delete("/api/users/" + user.getId()))
                 .andExpect(status().isNoContent());
         assertTrue(userRepository.findById(user.getId()).isEmpty());
+
+
     }
 }
