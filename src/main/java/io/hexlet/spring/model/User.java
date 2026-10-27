@@ -10,12 +10,14 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-public class User {
+public class User implements BaseEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -26,6 +28,23 @@ public class User {
 
     @Column(unique = true)
     private String email;
+
+    @OneToMany(
+            mappedBy = "author",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<Post> posts = new ArrayList<>();
+
+    public void addPost(Post post) {
+        posts.add(post);
+        post.setAuthor(this);
+    }
+
+    public void removePost(Post post) {
+        posts.remove(post);
+        post.setAuthor(null);
+    }
 
     @LastModifiedDate
     private LocalDate updatedAt;

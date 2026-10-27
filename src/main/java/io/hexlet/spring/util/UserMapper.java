@@ -4,6 +4,7 @@ import io.hexlet.spring.dto.UserDTO;
 import io.hexlet.spring.model.User;
 import org.springframework.stereotype.Component;
 
+@Deprecated
 @Component
 public class UserMapper {
     public UserDTO toDTO(User user) {

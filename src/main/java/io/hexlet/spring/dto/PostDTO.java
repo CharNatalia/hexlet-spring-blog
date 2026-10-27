@@ -2,6 +2,8 @@ package io.hexlet.spring.dto;
 
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PostDTO {
     private Long id;
@@ -10,6 +12,8 @@ public class PostDTO {
     private boolean published;
     private LocalDate createdAt;
     private LocalDate updatedAt;
+    private Long userId;
+    private List<String> tags = new ArrayList<>();
 
     public String getTitle() {
         return title;
@@ -57,5 +61,21 @@ public class PostDTO {
 
     public void setUpdatedAt(LocalDate updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public void setTags(List<String> tags) {
+        this.tags = tags;
     }
 }

@@ -1,5 +1,13 @@
 package io.hexlet.spring.dto;
 
+import io.hexlet.spring.model.Post;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public class UserDTO {
     private Long id;
     private String firstName;

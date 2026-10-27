@@ -2,8 +2,8 @@ package io.hexlet.spring.controller;
 
 import io.hexlet.spring.Repository.UserRepository;
 import io.hexlet.spring.dto.UserDTO;
+import io.hexlet.spring.mapper.UserMapper;
 import io.hexlet.spring.model.User;
-import io.hexlet.spring.util.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
