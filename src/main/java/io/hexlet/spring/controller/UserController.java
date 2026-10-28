@@ -1,6 +1,6 @@
 package io.hexlet.spring.controller;
 
-import io.hexlet.spring.Repository.UserRepository;
+import io.hexlet.spring.repository.UserRepository;
 import io.hexlet.spring.dto.UserDTO;
 import io.hexlet.spring.mapper.UserMapper;
 import io.hexlet.spring.model.User;
@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -29,13 +30,26 @@ public class UserController {
     @Value("${app.page-size}")
     private int page;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public UserDTO create(@RequestBody User user) {
-        if (user.getEmail() == null || user.getEmail().isBlank()) {
+    public UserDTO create(@RequestBody User data) {
+        if (data.getEmail() == null || data.getEmail().isBlank()) {
             throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "Заголовок не должен быть пустым");
+                    HttpStatus.BAD_REQUEST, "Email не должен быть пустым");
         }
+
+        if (data.getPassword() == null || data.getPassword().isBlank()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "Пароль не должен быть пустым");
+        }
+
+        var user = new User();
+        user.setEmail(data.getEmail());
+        user.setPasswordDigest(passwordEncoder.encode(data.getPassword()));
+
         return userMapper.toDTO(userRepository.save(user));
     }
 

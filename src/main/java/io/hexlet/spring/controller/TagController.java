@@ -1,6 +1,6 @@
 package io.hexlet.spring.controller;
 
-import io.hexlet.spring.Repository.TagRepository;
+import io.hexlet.spring.repository.TagRepository;
 import io.hexlet.spring.dto.TagCreateDTO;
 import io.hexlet.spring.dto.TagDTO;
 import io.hexlet.spring.dto.TagUpdateDTO;

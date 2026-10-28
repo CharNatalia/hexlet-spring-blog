@@ -1,8 +1,10 @@
 package hexlet.code.spring.controller.api;
 
 import io.hexlet.spring.Application;
-import io.hexlet.spring.Repository.PostRepository;
+import io.hexlet.spring.repository.PostRepository;
+import io.hexlet.spring.repository.UserRepository;
 import io.hexlet.spring.model.Post;
+import io.hexlet.spring.model.User;
 import net.datafaker.Faker;
 import org.instancio.Instancio;
 import org.instancio.Select;
@@ -38,6 +40,9 @@ public class PostsControllerTest {
     @Autowired
     private ObjectMapper om;
 
+    @Autowired
+    private UserRepository userRepository;
+
     @BeforeEach
     void beforeEach() {
         postRepository.deleteAll();
@@ -45,9 +50,16 @@ public class PostsControllerTest {
 
     @Test
     public void testCreate() throws Exception {
+        var user = new User();
+        user.setFirstName("John");
+        user.setLastName("Smith");
+        user.setEmail("john@example.com");
+        user = userRepository.save(user);
+
         var data = new HashMap<>();
         data.put("title", "test");
         data.put("content", "test create method");
+        data.put("userId", user.getId());
 
         var request =
                 post("/api/posts")

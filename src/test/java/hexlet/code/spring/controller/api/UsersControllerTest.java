@@ -1,7 +1,7 @@
 package hexlet.code.spring.controller.api;
 
 import io.hexlet.spring.Application;
-import io.hexlet.spring.Repository.UserRepository;
+import io.hexlet.spring.repository.UserRepository;
 import io.hexlet.spring.model.User;
 import net.datafaker.Faker;
 import org.instancio.Instancio;
@@ -15,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import tools.jackson.databind.ObjectMapper;
 
-import java.time.LocalDate;
 import java.util.HashMap;
 
 import static org.assertj.core.api.Assertions.assertThat;

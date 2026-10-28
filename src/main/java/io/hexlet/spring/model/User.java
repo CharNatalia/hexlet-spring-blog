@@ -1,23 +1,26 @@
 package io.hexlet.spring.model;
 
-import io.hexlet.spring.util.IdGenerator;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
-
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 
 @Entity
 @Table(name = "users")
 @EntityListeners(AuditingEntityListener.class)
-public class User implements BaseEntity {
+public class User implements BaseEntity, UserDetails {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
@@ -25,9 +28,6 @@ public class User implements BaseEntity {
     private String firstName;
     private String lastName;
     private LocalDate birthday;
-
-    @Column(unique = true)
-    private String email;
 
     @OneToMany(
             mappedBy = "author",
@@ -52,6 +52,48 @@ public class User implements BaseEntity {
     @CreatedDate
     @Column(nullable = false, updatable = false)
     private LocalDate createdAt;
+
+    @Column(unique = true)
+    @Email
+    private String email;
+
+    @NotBlank
+    private String passwordDigest;
+
+    @Override
+    public String getPassword() {
+        return passwordDigest;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return new ArrayList<GrantedAuthority>();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
 
     public Long getId() {
         return id;
@@ -99,5 +141,21 @@ public class User implements BaseEntity {
 
     public LocalDate getCreatedAt() {
         return createdAt;
+    }
+
+    public List<Post> getPosts() {
+        return posts;
+    }
+
+    public void setPosts(List<Post> posts) {
+        this.posts = posts;
+    }
+
+    public String getPasswordDigest() {
+        return passwordDigest;
+    }
+
+    public void setPasswordDigest(String passwordDigest) {
+        this.passwordDigest = passwordDigest;
     }
 }

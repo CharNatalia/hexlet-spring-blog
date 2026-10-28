@@ -1,4 +1,4 @@
-package io.hexlet.spring.Repository;
+package io.hexlet.spring.repository;
 
 import io.hexlet.spring.model.Tag;
 import org.springframework.data.jpa.repository.JpaRepository;

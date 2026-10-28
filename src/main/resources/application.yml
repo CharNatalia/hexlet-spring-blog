@@ -25,3 +25,7 @@ app:
   welcome-message: "Welcome to Spring blog!" # наше кастомное сообщение
   admin-email: "admin@mail.com"
   page-size: 10
+
+rsa:
+  public-key: classpath:certs/public.pem
+  private-key: classpath:certs/private.pem
