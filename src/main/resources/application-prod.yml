@@ -1,0 +1,8 @@
+spring:
+  datasource:
+    url: ${JDBC_DATABASE_URL}
+  jpa:
+    show-sql: false
+server:
+  error:
+    include-stacktrace: never

@@ -26,10 +26,10 @@ public class GlobalExceptionHandler {
                 .forEach(error -> errors.put(error.getField(), error.getDefaultMessage()));
         return ResponseEntity.unprocessableContent().body(errors);
     }
-
-    @ExceptionHandler(Exception.class)
-    public ResponseEntity<String> handleOtherExceptions(Exception ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body("Something went wrong: " + ex.getMessage());
-    }
+//с ним не открывается 404 из ресурсов
+//    @ExceptionHandler(Exception.class)
+//    public ResponseEntity<String> handleOtherExceptions(Exception ex) {
+//        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                .body("Something went wrong: " + ex.getMessage());
+//    }
 }

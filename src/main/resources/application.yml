@@ -1,18 +1,14 @@
+server:
+  port: ${PORT:8080}
 spring:
-  application:
-    name: hexlet-spring-blog
-  datasource:
-    url: jdbc:h2:mem:testdb
-    driverClassName: org.h2.Driver
-    username: sa
-    password:
-  h2:
-    console:
-      enabled: true
   jpa:
-    show-sql: true # вывод SQL-запросов
+    show-sql: true
     hibernate:
       ddl-auto: update
+  profiles:
+    default: dev
+  application:
+    name: hexlet-spring-blog
   output:
     ansi:
       enabled: always # цветной вывод логотипа
